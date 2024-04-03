@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Python_Checker_Modul" Id="{0da26595-c785-4b84-9411-3e05aa8050db}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Python_Checker_Modul
+VAR_IN_OUT
+	
+		EA_Python_Checker			: Python_Checker;
+END_VAR
+VAR
+		
+		TON_1						:TON;
+		TON_2						:TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+
+IF EA_Python_Checker.Python_Active THEN
+	TON_1(IN := TRUE, PT := T#5000MS);
+
+	IF TON_1.Q THEN
+		EA_Python_Checker.Test := TRUE;
+		TON_1(In := FALSE);
+	END_IF
+
+	TON_2(IN := EA_Python_Checker.Test, PT := T#5000MS);
+
+	IF TON_2.Q THEN 
+		EA_Python_Checker.Python_ERROR := TRUE;
+		EA_Python_Checker.Python_Active := FALSE;
+		TON_2(In := FALSE);
+	END_IF
+	
+ELSE
+	TON_1(In := FALSE);
+	EA_Python_Checker.Test := FALSE; 
+
+
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="Python_Checker_Modul">
+      <LineId Id="43" Count="2" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="35" Count="1" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="63" Count="1" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="46" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

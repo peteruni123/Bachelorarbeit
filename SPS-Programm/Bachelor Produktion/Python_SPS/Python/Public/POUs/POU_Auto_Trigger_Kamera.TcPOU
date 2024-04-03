@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="POU_Auto_Trigger_Kamera" Id="{7ddd821b-b727-42f6-bcf5-efed6bb16a7f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK POU_Auto_Trigger_Kamera
+
+VAR_INPUT
+	
+		EA_Kamera_Index			: INT;
+END_VAR
+
+VAR
+	
+	//Locale Variablen
+	L_Enable: 					BOOL;
+	L_TEMP_CAM_ID: 				INT;
+	L_Step_ID: 					INT := 0;
+	L_SUCCESS:					BOOL;
+	L_Done:						BOOL;
+	L_Test_ID: 					INT := 1;
+	L_Delay_TON : 				TON;
+	L_Error_TON : 				TON;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT L_Enable THEN
+	L_Step_ID := 0;
+	RETURN;
+END_IF
+
+CASE L_Step_ID OF
+	
+0:
+	//1. Überprüfen ob Kamera bereit ist, falls ja Trigger senden
+	L_Error_TON(IN := TRUE, PT:= T#5S);
+	
+	L_SUCCESS := Python_Kamera_Daten.Lokal[EA_Kamera_Index].STAT.Active AND
+					Python_Checker.Python_Active AND
+					NOT Python_Kamera_Daten.Lokal[EA_Kamera_Index].STAT.Busy; 
+	IF L_SUCCESS THEN
+		Python_Kamera_Daten.Lokal[EA_Kamera_Index].CMD.ID := CONCAT('Test_', INT_TO_STRING(L_Test_ID));
+		Python_Kamera_Daten.Lokal[EA_Kamera_Index].CMD.Trigger := TRUE;
+		
+		// Hier wird STAT von Regime
+		Python_Kamera_Daten.Lokal[EA_Kamera_Index].STAT.IsDone := FALSE;
+		Python_Kamera_Daten.Lokal[EA_Kamera_Index].STAT.PictureValid := FALSE;
+		//
+		
+		L_Error_TON(IN:=FALSE);
+		L_Step_ID := 10;
+	END_IF
+	
+	IF L_Error_TON.Q THEN
+		L_Error_TON(IN:=FALSE);
+		L_Step_ID := 100;	
+	END_IF
+	
+10:
+	//2. Überprüfe ob das Bild valide war und ob der Auftrag abgeschlossen ist
+	L_Error_TON(IN := TRUE, PT:= T#5S);
+	
+	L_Done :=  Python_Kamera_Daten.Lokal[EA_Kamera_Index].STAT.IsDone AND
+					Python_Kamera_Daten.Lokal[EA_Kamera_Index].STAT.PictureValid AND
+					NOT Python_Kamera_Daten.Lokal[EA_Kamera_Index].STAT.Busy ;
+	IF L_DONE THEN
+		L_Step_ID := 20;
+		L_Error_TON(IN:=FALSE);
+	END_IF
+	
+	IF L_Error_TON.Q THEN
+		L_Error_TON(IN:=FALSE);
+		L_Step_ID := 100;	
+	END_IF
+
+20:
+	//3. Trigger zurücksetzen
+	Python_Kamera_Daten.Lokal[EA_Kamera_Index].CMD.Trigger := FALSE;
+	//Increase Test ID
+	L_Test_ID := L_Test_ID + 1;
+	IF L_Test_ID > 100 THEN
+		L_Test_ID := 1;
+	END_IF
+	L_Step_ID := 30;
+	
+30:
+ 	//4. ein kleiner delay,sodass nur alle 2 sekunden getriggert wird
+ 	L_Delay_TON(IN := TRUE, PT := Parameter.Lokal[EA_Kamera_Index].Value);
+	
+	IF L_Delay_TON.Q THEN
+		L_Delay_TON(IN:= FALSE);
+		L_Step_ID := 0;
+	END_IF
+	
+100:
+	L_Enable := FALSE;
+	Python_Checker.Python_ERROR := TRUE;
+	
+	
+	
+	
+
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="POU_Auto_Trigger_Kamera">
+      <LineId Id="10" Count="2" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="41" Count="1" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="126" Count="0" />
+      <LineId Id="33" Count="2" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="122" Count="0" />
+      <LineId Id="65" Count="1" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="125" Count="0" />
+      <LineId Id="50" Count="1" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="47" Count="2" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="53" Count="0" />
+      <LineId Id="58" Count="2" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="69" Count="1" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="113" Count="2" />
+      <LineId Id="112" Count="0" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="75" Count="1" />
+      <LineId Id="78" Count="3" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="82" Count="2" />
+      <LineId Id="86" Count="4" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="116" Count="2" />
+      <LineId Id="120" Count="1" />
+      <LineId Id="119" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="21" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

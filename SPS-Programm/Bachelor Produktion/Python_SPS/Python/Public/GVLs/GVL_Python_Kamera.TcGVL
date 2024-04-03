@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <GVL Name="GVL_Python_Kamera" Id="{11635017-e245-4fca-91b3-731432b214c7}">
+    <Declaration><![CDATA[{attribute 'Tc2GvlVarNames'}
+VAR_GLOBAL
+	
+	Python_Kamera_Anzahl	: INT := Python_Kamera_Liste_Obergrenze - 1; 
+	Python_Checker			: Python_Checker;
+	
+	//Kameradaten werden initalisiert und die Namen für die Kameras festgelegt	
+	Python_Kamera_Daten 	: Python_Kamera_Daten
+		
+		:= (
+				Lokal:=
+					[
+						(* Unbelegt MUSS als erster Eintrag vorhanden sein *)
+						(),
+						(* Kamera_CAM1 *)
+						( CameraName := 'Kamera_CAM1'),
+						(* Kamera_CAM2 *)
+						( CameraName := 'Kamera_CAM2'),
+						(* Kamera_CAM3 *)
+						( CameraName := 'Kamera_CAM3'),
+						(* Obergrenze *)
+						()
+					]
+				);
+				
+	// Hier werden die Parameter festgelegt
+	Parameter		: Parameter
+		
+		:= (
+				Lokal:=
+					[
+						(* Unbelegt MUSS als erster Eintrag vorhanden sein *)
+						(),
+						(* Kamera_CAM1 *)
+						( Name:= 'Kamera_CAM1', Value := T#4S),
+						(* Kamera_CAM2 *)
+						( Name:= 'Kamera_CAM2', Value := T#2S),
+						(* Kamera_CAM3 *)
+						( Name:= 'Kamera_CAM3', Value := T#8S),
+						(* Obergrenze *)
+						()
+					]
+				);
+				
+		
+		
+			
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

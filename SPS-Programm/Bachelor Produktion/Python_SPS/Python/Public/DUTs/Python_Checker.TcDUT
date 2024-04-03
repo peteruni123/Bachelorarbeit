@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="Python_Checker" Id="{0c77d5bf-5c2d-42cc-98e7-ae31c13767e1}">
+    <Declaration><![CDATA[TYPE Python_Checker :
+STRUCT
+		
+		Python_Active			:BOOL := FALSE;
+		Test					:BOOL := FALSE;
+		Python_ERROR			:BOOL := FALSE;
+
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MAIN_LIB_Python" Id="{114d4f12-f6d2-45ca-abc9-42315d133bd2}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN_LIB_Python
+VAR
+	L_Kamera_Index						: INT;
+	L_Python_Checker					: Python_Checker_Modul;
+	L_POU_Auto_Trigger_Kamera			: ARRAY [Python_Kamera_Liste_Untergrenze..Python_Kamera_Liste_Obergrenze] OF POU_Auto_Trigger_Kamera;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+L_Python_Checker(
+	EA_Python_Checker		:= Python_Checker
+);
+
+
+FOR L_Kamera_Index := Python_Kamera_Liste_Untergrenze + 1  TO Python_Kamera_Liste_Obergrenze - 1 DO	(* $JR_Kamera_VisionX1.3.0$ *)
+
+	L_POU_Auto_Trigger_Kamera[L_Kamera_Index](
+		
+		EA_Kamera_Index		:= L_Kamera_Index
+		
+	);
+
+END_FOR]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN_LIB_Python">
+      <LineId Id="22" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="23" Count="1" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="41" Count="8" />
+      <LineId Id="40" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

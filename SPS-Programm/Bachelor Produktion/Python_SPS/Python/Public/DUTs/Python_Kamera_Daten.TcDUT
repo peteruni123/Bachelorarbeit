@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="Python_Kamera_Daten" Id="{7d071330-3073-47d1-9de6-9a7b78879b85}">
+    <Declaration><![CDATA[TYPE Python_Kamera_Daten :
+STRUCT
+	
+	Lokal		: ARRAY [Python_Kamera_Liste_Untergrenze..Python_Kamera_Liste_Obergrenze] OF  Python_Kamera_Interface;
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

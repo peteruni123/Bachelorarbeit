@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="Parameter" Id="{367116d0-6789-4053-85e6-818d8f76a2ac}">
+    <Declaration><![CDATA[TYPE Parameter :
+STRUCT
+	
+	Lokal		: ARRAY [Python_Kamera_Liste_Untergrenze..Python_Kamera_Liste_Obergrenze] OF  Parameter_Lokal;
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
